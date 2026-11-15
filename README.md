@@ -1,6 +1,6 @@
 # Universal Emoji
 
-Minecraft Java 版 **1.10 → 1.21.x** 的完整 Emoji 聊天系统。纯服务端 + 资源包方案，不依赖任何客户端模组。
+Minecraft Java 版 **1.10 → 26.3** 的完整 Emoji 聊天系统。纯服务端 + 资源包方案，不依赖任何客户端模组。
 
 聊天里打出原生 emoji（`😂`、`👨‍👩‍👧`、`❤️`），或者直接写坐标 `[1.3]`，都会在游戏内渲染成真正的彩色图标。
 
@@ -17,7 +17,7 @@ Minecraft Java 版 **1.10 → 1.21.x** 的完整 Emoji 聊天系统。纯服务�
 | --- | --- | --- |
 | `tools/build_unified.py` | 拉全量 Twemoji，拼成超长图集，生成资源包 + 三端码表 | `dist/` |
 | `emoji-core` | 三端校验 + 最长匹配算法（纯 Java，不碰服务端 API） | Maven 模块 |
-| `emoji-plugin-modern` | Paper 1.19.4 - 1.21.x 的插件（AsyncChatEvent + 逃离聊天签名） | Maven 模块 |
+| `emoji-plugin-modern` | Paper 1.19.4 - 26.3 的插件（AsyncChatEvent + 逃离聊天签名） | Maven 模块 |
 | `emoji-plugin-legacy` | Spigot/Paper 1.10 - 1.15 的插件（AsyncPlayerChatEvent） | Maven 模块 |
 
 当前构建：**3838 个 emoji**，16 列 × 240 行，PUA 占用 `U+E000 .. U+EFFF`。
@@ -73,7 +73,7 @@ mvn -B package
 产物：
 
 ```
-emoji-plugin-modern/target/UniversalEmoji-1.0.0.jar          # 1.19.4 - 1.21.x
+emoji-plugin-modern/target/UniversalEmoji-1.0.0.jar          # 1.19.4 - 26.3
 emoji-plugin-legacy/target/UniversalEmoji-Legacy-1.0.0.jar   # 1.10 - 1.15
 ```
 
@@ -189,7 +189,7 @@ Bukkit.getServer().sendMessage(newLine);        // 服务器系统消息，不�
 Minecraft-TriEmoji/
 ├── tools/build_unified.py        # 图集 + 资源包 + 三端表
 ├── emoji-core/                   # 纯 Java 解析核心（有单测）
-├── emoji-plugin-modern/          # Paper 1.19.4 - 1.21.x
+├── emoji-plugin-modern/          # Paper 1.19.4 - 26.3
 ├── emoji-plugin-legacy/          # Spigot/Paper 1.10 - 1.15
 ├── dist/                         # 构建产物
 └── docs/                         # 架构与部署细节
