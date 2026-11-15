@@ -1,0 +1,36 @@
+{
+  "generated_at": "2026-11-15T12:04:21Z",
+  "twemoji": "v15.1.0",
+  "assets": 3838,
+  "grid": {
+    "cols": 16,
+    "rows": 240,
+    "cell": 32,
+    "pua_total": 3840
+  },
+  "font": {
+    "ascent": 10,
+    "height": 10
+  },
+  "pua_range": [
+    "U+E000",
+    "U+EEFF"
+  ],
+  "packs": {
+    "modern": {
+      "file": "Universal_Emoji.zip",
+      "sha1": "f2ce2a2617212aafd1ee19e4216f085d86ec3f40",
+      "size": 6286247
+    },
+    "legacy": {
+      "file": "Universal_Emoji_legacy.zip",
+      "sha1": "a04cc1e49a641593f11f542fc315590a96b332d5",
+      "size": 6291914
+    }
+  },
+  "platforms": {
+    "ios": 3835,
+    "android": 3838,
+    "windows": 3585
+  }
+}

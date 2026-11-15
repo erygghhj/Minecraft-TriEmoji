@@ -1,0 +1,7 @@
+name: UniversalEmoji
+version: '1.0.0'
+main: io.github.universalemoji.legacy.LegacyEmojiPlugin
+api-version: '1.13'
+description: PUA bitmap emoji chat for Spigot/Paper 1.10 - 1.15
+authors: [UniversalEmoji]
+website: https://github.com/your-name/universal-emoji

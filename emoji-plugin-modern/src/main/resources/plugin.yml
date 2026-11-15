@@ -1,0 +1,7 @@
+name: UniversalEmoji
+version: '1.0.0'
+main: io.github.universalemoji.plugin.UniversalEmojiPlugin
+api-version: '1.19'
+description: PUA bitmap emoji chat for Paper 1.19.4 - 1.21.x
+authors: [UniversalEmoji]
+website: https://github.com/your-name/universal-emoji

@@ -1,0 +1,8 @@
+target/
+.cache/
+*.iml
+.idea/
+.vscode/
+dist/*.zip
+dist/*.png
+dist/sha1.txt

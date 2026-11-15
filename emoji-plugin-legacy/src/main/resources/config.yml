@@ -1,0 +1,11 @@
+# Universal Emoji (legacy build, 1.10 - 1.15)
+# The client downloads the pack itself: only URL + SHA-1 are used.
+
+resourcepack:
+  url: "https://example.com/Universal_Emoji_legacy.zip"
+  sha1: "a04cc1e49a641593f11f542fc315590a96b332d5"
+
+emoji:
+  columns: 16
+  unsupported-text: "[不支持的表情]"
+  debug: false
