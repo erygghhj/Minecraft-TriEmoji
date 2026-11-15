@@ -10,8 +10,8 @@
     <packaging>pom</packaging>
 
     <name>Universal Emoji</name>
-    <description>PUA bitmap emoji chat system for Minecraft Java 1.10 - 1.21.x</description>
-    <url>https://github.com/your-name/universal-emoji</url>
+    <description>PUA bitmap emoji chat system for Minecraft Java 1.10 - 26.3</description>
+    <url>https://github.com/erygghhj/Minecraft-TriEmoji</url>
 
     <modules>
         <module>emoji-core</module>

@@ -186,7 +186,7 @@ Bukkit.getServer().sendMessage(newLine);        // 服务器系统消息，不�
 ## 八、目录
 
 ```
-universal-emoji/
+Minecraft-TriEmoji/
 ├── tools/build_unified.py        # 图集 + 资源包 + 三端表
 ├── emoji-core/                   # 纯 Java 解析核心（有单测）
 ├── emoji-plugin-modern/          # Paper 1.19.4 - 1.21.x
