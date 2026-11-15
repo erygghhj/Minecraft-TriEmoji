@@ -31,10 +31,10 @@ Minecraft Java 版 **1.10 → 26.3** 的完整 Emoji 聊天系统。纯服务端
 
 | 《我的世界》Java 版 | 资源包 | 插件 | 说明 |
 | --- | --- | --- | --- |
-| 1.10 – 1.15 | `Universal_Emoji_legacy.zip` | `UniversalEmoji-Legacy-1.0.0.jar` | `AsyncPlayerChatEvent`，无聊天签名 |
-| 1.16 – 1.18 | `Universal_Emoji_legacy.zip` | `UniversalEmoji-Legacy-1.0.0.jar` | `api-version: 1.13`，事件仍是标准路径 |
-| 1.19 – 1.19.4 | `Universal_Emoji_legacy.zip` | `UniversalEmoji-1.0.0.jar` | 1.19 起 `AsyncChatEvent` 可用 |
-| 1.20 – 26.3 | `Universal_Emoji.zip` | `UniversalEmoji-1.0.0.jar` | 字体改为 `reference` 结构 |
+| 1.10 – 1.15 | `Universal_Emoji_legacy.zip` | `UniversalEmoji-Legacy-2.0.0-beta.jar` | `AsyncPlayerChatEvent`，无聊天签名 |
+| 1.16 – 1.18 | `Universal_Emoji_legacy.zip` | `UniversalEmoji-Legacy-2.0.0-beta.jar` | `api-version: 1.13`，事件仍是标准路径 |
+| 1.19 – 1.19.4 | `Universal_Emoji_legacy.zip` | `UniversalEmoji-2.0.0-beta.jar` | 1.19 起 `AsyncChatEvent` 可用 |
+| 1.20 – 26.3 | `Universal_Emoji.zip` | `UniversalEmoji-2.0.0-beta.jar` | 字体改为 `reference` 结构 |
 
 两份资源包的差别只在字体 JSON 的写法，图集本身逐字节相同：
 
@@ -97,8 +97,8 @@ mvn -B package
 产物：
 
 ```
-emoji-plugin-modern/target/UniversalEmoji-1.0.0.jar          # 1.19.4 - 26.3
-emoji-plugin-legacy/target/UniversalEmoji-Legacy-1.0.0.jar   # 1.10 - 1.15
+emoji-plugin-modern/target/UniversalEmoji-2.0.0-beta.jar          # 1.19 - 26.3
+emoji-plugin-legacy/target/UniversalEmoji-Legacy-2.0.0-beta.jar   # 1.10 - 1.18
 ```
 
 ---

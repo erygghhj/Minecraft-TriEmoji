@@ -1,4 +1,4 @@
-# Universal Emoji 1.0.0
+# Universal Emoji 2.0.0-beta
 
 《我的世界》Java 版 **1.10 → 26.3** 的 Emoji 聊天系统。服务端把原生 emoji 换成私用区字符，客户端靠资源包渲染成彩色图标，不需要任何客户端模组。
 
@@ -10,24 +10,24 @@
 
 | 文件 | 类型 |
 | --- | --- |
-| `UniversalEmoji-1.0.0.jar` | 插件（Paper 1.19 – 26.3） |
+| `UniversalEmoji-2.0.0-beta.jar` | 插件（Paper 1.19 – 26.3） |
 | `Universal_Emoji.zip` | **资源包（必需）** |
 
 ### 分组二：1.10 – 1.19.4
 
 | 文件 | 类型 |
 | --- | --- |
-| `UniversalEmoji-Legacy-1.0.0.jar` | 插件（Spigot/Paper 1.10 – 1.18） |
+| `UniversalEmoji-Legacy-2.0.0-beta.jar` | 插件（Spigot/Paper 1.10 – 1.18） |
 | `Universal_Emoji_legacy.zip` | **资源包（必需）** |
 
 ## 《我的世界》版本对照
 
 | 游戏版本 | 资源包 | 插件 | 说明 |
 | --- | --- | --- | --- |
-| 1.10 – 1.15 | `Universal_Emoji_legacy.zip` | `UniversalEmoji-Legacy-1.0.0.jar` | `AsyncPlayerChatEvent`，无聊天签名 |
-| 1.16 – 1.18 | `Universal_Emoji_legacy.zip` | `UniversalEmoji-Legacy-1.0.0.jar` | `api-version: 1.13` |
-| 1.19 – 1.19.4 | `Universal_Emoji_legacy.zip` | `UniversalEmoji-1.0.0.jar` | 1.19 起 `AsyncChatEvent` 可用 |
-| 1.20 – 26.3 | `Universal_Emoji.zip` | `UniversalEmoji-1.0.0.jar` | 字体改为 `reference` 结构 |
+| 1.10 – 1.15 | `Universal_Emoji_legacy.zip` | `UniversalEmoji-Legacy-2.0.0-beta.jar` | `AsyncPlayerChatEvent`，无聊天签名 |
+| 1.16 – 1.18 | `Universal_Emoji_legacy.zip` | `UniversalEmoji-Legacy-2.0.0-beta.jar` | `api-version: 1.13` |
+| 1.19 – 1.19.4 | `Universal_Emoji_legacy.zip` | `UniversalEmoji-2.0.0-beta.jar` | 1.19 起 `AsyncChatEvent` 可用 |
+| 1.20 – 26.3 | `Universal_Emoji.zip` | `UniversalEmoji-2.0.0-beta.jar` | 字体改为 `reference` 结构 |
 
 两份资源包的图集逐字节相同，只有字体 JSON 写法不同：`legacy` 用 1.16.5 结构（内联 `bitmap` + `legacy_unicode`），`modern` 用 1.21.4 结构（三个 `reference` + 自己的 `bitmap`）。
 
