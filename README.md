@@ -17,10 +17,34 @@ Minecraft Java 版 **1.10 → 26.3** 的完整 Emoji 聊天系统。纯服务端
 | --- | --- | --- |
 | `tools/build_unified.py` | 拉全量 Twemoji，拼成超长图集，生成资源包 + 三端码表 | `dist/` |
 | `emoji-core` | 三端校验 + 最长匹配算法（纯 Java，不碰服务端 API） | Maven 模块 |
-| `emoji-plugin-modern` | Paper 1.19.4 - 26.3 的插件（AsyncChatEvent + 逃离聊天签名） | Maven 模块 |
-| `emoji-plugin-legacy` | Spigot/Paper 1.10 - 1.15 的插件（AsyncPlayerChatEvent） | Maven 模块 |
+| `emoji-plugin-modern` | Paper 1.19 - 26.3 的插件（AsyncChatEvent + 绕开聊天签名） | Maven 模块 |
+| `emoji-plugin-legacy` | Spigot/Paper 1.10 - 1.18 的插件（AsyncPlayerChatEvent） | Maven 模块 |
 
 当前构建：**3838 个 emoji**，16 列 × 240 行，PUA 占用 `U+E000 .. U+EFFF`。
+
+---
+
+## 适配版本（《我的世界》Java 版）
+
+**资源包是强制依赖，不是可选装饰。** 服务端把 emoji 换成私用区字符（`U+E000` 起）之后，
+没装资源包的客户端只会在聊天里看到空白或方块。所以插件和资源包必须成对部署，缺一个就不成立。
+
+| 《我的世界》Java 版 | 资源包 | 插件 | 说明 |
+| --- | --- | --- | --- |
+| 1.10 – 1.15 | `Universal_Emoji_legacy.zip` | `UniversalEmoji-Legacy-1.0.0.jar` | `AsyncPlayerChatEvent`，无聊天签名 |
+| 1.16 – 1.18 | `Universal_Emoji_legacy.zip` | `UniversalEmoji-Legacy-1.0.0.jar` | `api-version: 1.13`，事件仍是标准路径 |
+| 1.19 – 1.19.4 | `Universal_Emoji_legacy.zip` | `UniversalEmoji-1.0.0.jar` | 1.19 起 `AsyncChatEvent` 可用 |
+| 1.20 – 26.3 | `Universal_Emoji.zip` | `UniversalEmoji-1.0.0.jar` | 字体改为 `reference` 结构 |
+
+两份资源包的差别只在字体 JSON 的写法，图集本身逐字节相同：
+
+- `legacy`：1.16.5 的原版结构（内联 `bitmap` + `legacy_unicode`）
+- `modern`：1.21.4 的原版结构（三个 `reference` + 自己的 `bitmap`）
+
+`pack.mcmeta` 同时声明 `pack_format: 1` 和 `supported_formats: 1..999`，所以任何版本都不会弹“不兼容”。
+
+**实测起服验证过的**：Paper 1.21.11（build 132）、Paper 26.3（build 252，Java 25）。
+其余版本按上表的包结构构建，未逐版本起服验证。
 
 ---
 
