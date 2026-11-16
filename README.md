@@ -11,6 +11,21 @@ Minecraft Java 版 **1.10 → 26.3** 的完整 Emoji 聊天系统。纯服务端
 
 ---
 
+## 直接下载
+
+文件都在仓库里，点开即下，不依赖 Release：
+
+| 文件 | 适用版本 | 类型 |
+| --- | --- | --- |
+| [`Universal_Emoji.zip`](https://github.com/erygghhj/Minecraft-TriEmoji/raw/main/dist/Universal_Emoji.zip) | 1.20 – 26.3 | 资源包（**必装**） |
+| [`Universal_Emoji_legacy.zip`](https://github.com/erygghhj/Minecraft-TriEmoji/raw/main/dist/Universal_Emoji_legacy.zip) | 1.10 – 1.19.4 | 资源包（**必装**） |
+| [`UniversalEmoji-2.0.0-beta.jar`](https://github.com/erygghhj/Minecraft-TriEmoji/raw/main/release/UniversalEmoji-2.0.0-beta.jar) | Paper 1.19 – 26.3 | 插件 |
+| [`UniversalEmoji-Legacy-2.0.0-beta.jar`](https://github.com/erygghhj/Minecraft-TriEmoji/raw/main/release/UniversalEmoji-Legacy-2.0.0-beta.jar) | Spigot/Paper 1.10 – 1.18 | 插件 |
+
+资源包和插件必须成对使用，只装插件不装包，游戏里只会显示空白方块。
+
+---
+
 ## 这套东西由两部分组成
 
 | 部分 | 作用 | 在哪 |
