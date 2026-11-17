@@ -3,7 +3,7 @@
 
 resourcepack:
   url: "https://example.com/Universal_Emoji_legacy.zip"
-  sha1: "2d461f9a75873b82efe201e066b981f837e521c8"
+  sha1: "61b3d65e8a5d4457b1cfa2f2454e9901bf028f78"
 
 emoji:
   columns: 16

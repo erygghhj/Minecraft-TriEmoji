@@ -21,9 +21,9 @@ Minecraft Java 版 **1.13 → 26.3** 的完整 Emoji 聊天系统。纯服务端
 | --- | --- | --- |
 | [`Universal_Emoji.zip`](https://github.com/erygghhj/Minecraft-TriEmoji/raw/main/dist/Universal_Emoji.zip) | 1.20 – 26.3 | 资源包（**必装**） |
 | [`Universal_Emoji_legacy.zip`](https://github.com/erygghhj/Minecraft-TriEmoji/raw/main/dist/Universal_Emoji_legacy.zip) | 1.10 – 1.19.4 | 资源包（**必装**） |
-| [`UniversalEmoji-Paper-1.20+-2.0.0-beta.jar`](https://github.com/erygghhj/Minecraft-TriEmoji/raw/main/release/UniversalEmoji-Paper-1.20+-2.0.0-beta.jar) | Paper 1.19 – 26.3 | 插件 |
-| [`UniversalEmoji-Paper-Legacy-1.10-1.18-2.0.0-beta.jar`](https://github.com/erygghhj/Minecraft-TriEmoji/raw/main/release/UniversalEmoji-Paper-Legacy-1.10-1.18-2.0.0-beta.jar) | Spigot/Paper 1.10 – 1.18 | 插件 |
-| [`UniversalEmoji-Spigot-1.20+-2.0.0-beta.jar`](https://github.com/erygghhj/Minecraft-TriEmoji/raw/main/release/UniversalEmoji-Spigot-1.20+-2.0.0-beta.jar) | Spigot **1.19 – 26.3** | 插件（S 版） |
+| [`UniversalEmoji-Paper-1.20+-2.1.0.jar`](https://github.com/erygghhj/Minecraft-TriEmoji/raw/main/release/UniversalEmoji-Paper-1.20+-2.1.0.jar) | Paper 1.19 – 26.3 | 插件 |
+| [`UniversalEmoji-Paper-Legacy-1.10-1.18-2.1.0.jar`](https://github.com/erygghhj/Minecraft-TriEmoji/raw/main/release/UniversalEmoji-Paper-Legacy-1.10-1.18-2.1.0.jar) | Spigot/Paper 1.10 – 1.18 | 插件 |
+| [`UniversalEmoji-Spigot-1.20+-2.1.0.jar`](https://github.com/erygghhj/Minecraft-TriEmoji/raw/main/release/UniversalEmoji-Spigot-1.20+-2.1.0.jar) | Spigot **1.19 – 26.3** | 插件（S 版） |
 
 资源包和插件必须成对使用，只装插件不装包，游戏里只会显示空白方块。
 
@@ -50,10 +50,10 @@ Minecraft Java 版 **1.13 → 26.3** 的完整 Emoji 聊天系统。纯服务端
 
 | 《我的世界》Java 版 | 资源包 | 插件 | 说明 |
 | --- | --- | --- | --- |
-| 1.13 – 1.15 | `Universal_Emoji_legacy.zip` | `UniversalEmoji-Paper-Legacy-1.10-1.18-2.0.0-beta.jar` | `AsyncPlayerChatEvent`，无聊天签名 |
-| 1.16 – 1.18 | `Universal_Emoji_legacy.zip` | `UniversalEmoji-Paper-Legacy-1.10-1.18-2.0.0-beta.jar` | `api-version: 1.13`，事件仍是标准路径 |
-| 1.19 – 1.19.4 | `Universal_Emoji_legacy.zip` | **P 版**：`UniversalEmoji-Paper-1.20+-2.0.0-beta.jar`<br>**S 版**：`UniversalEmoji-Spigot-1.20+-2.0.0-beta.jar` | 1.19 起有聊天签名，取消事件后由服务端重新广播 |
-| 1.20 – 26.3 | `Universal_Emoji.zip` | **P 版**：`UniversalEmoji-Paper-1.20+-2.0.0-beta.jar`<br>**S 版**：`UniversalEmoji-Spigot-1.20+-2.0.0-beta.jar` | P 版走 `AsyncChatEvent`，S 版走 `AsyncPlayerChatEvent` |
+| 1.13 – 1.15 | `Universal_Emoji_legacy.zip` | `UniversalEmoji-Paper-Legacy-1.10-1.18-2.1.0.jar` | `AsyncPlayerChatEvent`，无聊天签名 |
+| 1.16 – 1.18 | `Universal_Emoji_legacy.zip` | `UniversalEmoji-Paper-Legacy-1.10-1.18-2.1.0.jar` | `api-version: 1.13`，事件仍是标准路径 |
+| 1.19 – 1.19.4 | `Universal_Emoji_legacy.zip` | **P 版**：`UniversalEmoji-Paper-1.20+-2.1.0.jar`<br>**S 版**：`UniversalEmoji-Spigot-1.20+-2.1.0.jar` | 1.19 起有聊天签名，取消事件后由服务端重新广播 |
+| 1.20 – 26.3 | `Universal_Emoji.zip` | **P 版**：`UniversalEmoji-Paper-1.20+-2.1.0.jar`<br>**S 版**：`UniversalEmoji-Spigot-1.20+-2.1.0.jar` | P 版走 `AsyncChatEvent`，S 版走 `AsyncPlayerChatEvent` |
 
 > **1.10 – 1.12 为什么不在表里**：这一代客户端还没有 `assets/minecraft/font/default.json` 这套字体提供者系统（1.13 才引入），资源包在机制层面无法给客户端新增字形。要在 1.10 – 1.12 显示 emoji，只能走替换 `textures/font/unicode_page_*.png` 的老路子，那是另一套图集切分方式，本版没有提供。**插件本身（legacy 版）在 1.10 – 1.12 依然能正常跑**，只是 emoji 会退化成方块或空白。
 
@@ -124,9 +124,9 @@ mvn -B package
 产物：
 
 ```
-emoji-plugin-modern/target/UniversalEmoji-Paper-1.20+-2.0.0-beta.jar          # Paper 1.19 - 26.3
-emoji-plugin-spigot/target/UniversalEmoji-Spigot-1.20+-2.0.0-beta.jar        # Spigot 1.19 - 26.3
-emoji-plugin-legacy/target/UniversalEmoji-Paper-Legacy-1.10-1.18-2.0.0-beta.jar   # 1.10 - 1.18（Spigot/Paper 通用）
+emoji-plugin-modern/target/UniversalEmoji-Paper-1.20+-2.1.0.jar          # Paper 1.19 - 26.3
+emoji-plugin-spigot/target/UniversalEmoji-Spigot-1.20+-2.1.0.jar        # Spigot 1.19 - 26.3
+emoji-plugin-legacy/target/UniversalEmoji-Paper-Legacy-1.10-1.18-2.1.0.jar   # 1.10 - 1.18（Spigot/Paper 通用）
 ```
 
 ---
@@ -140,7 +140,7 @@ emoji-plugin-legacy/target/UniversalEmoji-Paper-Legacy-1.10-1.18-2.0.0-beta.jar 
 ```yaml
 resourcepack:
   url: "https://你的域名/Universal_Emoji.zip"
-  sha1: "ba8b4588060fe6bd45f51ec9bd5460be785bd75c"
+  sha1: "0ae232caf8b8211c3d485c18c11c28c6e541ec11"
   force: true
 ```
 

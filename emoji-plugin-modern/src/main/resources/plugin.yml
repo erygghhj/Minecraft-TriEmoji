@@ -1,5 +1,5 @@
 name: UniversalEmoji
-version: '2.0.0-beta'
+version: '2.1.0'
 main: io.github.universalemoji.plugin.UniversalEmojiPlugin
 api-version: '1.19'
 description: PUA bitmap emoji chat for Paper 1.19 - 26.3

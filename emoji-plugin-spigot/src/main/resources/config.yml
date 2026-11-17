@@ -4,7 +4,7 @@
 
 resourcepack:
   url: "https://example.com/Universal_Emoji.zip"
-  sha1: "ba8b4588060fe6bd45f51ec9bd5460be785bd75c"
+  sha1: "0ae232caf8b8211c3d485c18c11c28c6e541ec11"
   prompt: "Universal Emoji 资源包"
   force: true
 

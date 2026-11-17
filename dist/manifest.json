@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-17T14:05:00Z",
+  "generated_at": "2026-11-17T14:14:18Z",
   "twemoji": "v15.1.0",
   "assets": 3838,
   "grid": {
@@ -10,9 +10,7 @@
   },
   "font": {
     "ascent": 10,
-    "height": 10,
-    "tiles_modern": 15,
-    "tiles_legacy": 15
+    "height": 10
   },
   "pua_range": [
     "U+E000",
@@ -21,13 +19,13 @@
   "packs": {
     "modern": {
       "file": "Universal_Emoji.zip",
-      "sha1": "ba8b4588060fe6bd45f51ec9bd5460be785bd75c",
-      "size": 6341825
+      "sha1": "0ae232caf8b8211c3d485c18c11c28c6e541ec11",
+      "size": 6290586
     },
     "legacy": {
       "file": "Universal_Emoji_legacy.zip",
-      "sha1": "2d461f9a75873b82efe201e066b981f837e521c8",
-      "size": 6357420
+      "sha1": "61b3d65e8a5d4457b1cfa2f2454e9901bf028f78",
+      "size": 6296242
     }
   },
   "platforms": {

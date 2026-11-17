@@ -275,28 +275,51 @@ EMBEDDED_TEMPLATES = {
     },
 }
 
+# 1.21.9 dropped "supported_formats" in favour of min_format / max_format.
+# Both spellings are emitted so 1.20 - 1.21.8 still reads the older one.
 MODERN_PACK_META = {
     "pack": {
-        "pack_format": 1,
+        "pack_format": 15,
         "description": "Universal Emoji (Twemoji 15.1) - PUA glyph sheet",
-        "supported_formats": {"min_inclusive": 1, "max_inclusive": 999},
+        "supported_formats": {"min_inclusive": 15, "max_inclusive": 999},
+        "min_format": 15,
+        "max_format": 999,
     }
 }
 
-
-def build_default_json(template: dict, chars: List[str], ascent: int, height: int, texture: str) -> dict:
-    provider = {
-        "type": "bitmap",
-        "file": texture,
-        "ascent": ascent,
-        "height": height,
-        "chars": chars,
+# 1.13 - 1.19 only understand pack_format + supported_formats, and they do not
+# know the "reference" provider type at all, so the legacy pack stays inline.
+LEGACY_PACK_META = {
+    "pack": {
+        "pack_format": 4,
+        "description": "Universal Emoji (Twemoji 15.1) - PUA glyph sheet (legacy)",
+        "supported_formats": {"min_inclusive": 4, "max_inclusive": 9},
     }
+}
+
+# max rows per tile: 16 rows * 32px = 512px tall, small enough for any client
+TILE_ROWS = 16
+
+
+def build_default_json(template: dict, chars: List[str], ascent: int, height: int, tile_prefix: str) -> dict:
+    """Append one bitmap provider per 16-row tile.
+
+    A single 512x7680 strip makes some clients fail to load the whole pack, so
+    the atlas is emitted as several 512x512 tiles instead.
+    """
     out = json.loads(json.dumps(template))
     providers = out.setdefault("providers", [])
-    # our provider goes last so vanilla glyphs keep priority
-    providers.append(provider)
+    for index in range(0, len(chars), TILE_ROWS):
+        chunk = chars[index:index + TILE_ROWS]
+        providers.append({
+            "type": "bitmap",
+            "file": f"minecraft:font/{tile_prefix}_{index // TILE_ROWS}.png",
+            "ascent": ascent,
+            "height": height,
+            "chars": chunk,
+        })
     return out
+
 
 
 # --------------------------------------------------------------------------- #
@@ -376,9 +399,14 @@ def write_pack(
     font_dir = staging / "assets" / "minecraft" / "font"
     font_dir.mkdir(parents=True)
 
-    sheet.save(font_dir / f"universal_emoji.png", optimize=True)
+    cell = sheet.width // len(chars[0])
+    for index in range(0, len(chars), TILE_ROWS):
+        chunk = chars[index:index + TILE_ROWS]
+        top = index * cell
+        tile = sheet.crop((0, top, sheet.width, top + len(chunk) * cell))
+        tile.save(font_dir / f"universal_emoji_{index // TILE_ROWS}.png", optimize=True)
 
-    default = build_default_json(template, chars, ascent, height, "minecraft:font/universal_emoji.png")
+    default = build_default_json(template, chars, ascent, height, "universal_emoji")
     text = json.dumps(default, ensure_ascii=False, indent=4)
     (font_dir / "default.json").write_text(text, encoding="utf-8")
 
@@ -463,7 +491,7 @@ def main() -> int:
     if not args.skip_legacy:
         template_legacy = load_vanilla_template("legacy", cache)
         legacy_zip = write_pack(out_dir, "legacy", sheet, chars, args.ascent, args.height,
-                                MODERN_PACK_META, template_legacy)
+                                LEGACY_PACK_META, template_legacy)
         log(f"legacy pack -> {legacy_zip}")
 
     # platform tables
