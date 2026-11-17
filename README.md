@@ -63,6 +63,7 @@ Minecraft Java 版 **1.10 → 26.3** 的完整 Emoji 聊天系统。纯服务端
 `pack.mcmeta` 同时声明 `pack_format: 1` 和 `supported_formats: 1..999`，所以任何版本都不会弹“不兼容”。
 
 **实测起服验证过的**：Paper 1.21.11（build 132）、Paper 26.3（build 252，Java 25）。
+**Spigot 版（S 版）目前只有静态验证**（字节码零 `io.papermc` / `net.kyori` 引用、jar 条目齐全、下载链路 200），还没有在真实 Spigot 服起过服。
 其余版本按上表的包结构构建，未逐版本起服验证。
 
 ---
@@ -116,8 +117,9 @@ mvn -B package
 产物：
 
 ```
-emoji-plugin-modern/target/UniversalEmoji-Paper-1.20+-2.0.0-beta.jar          # 1.19 - 26.3
-emoji-plugin-legacy/target/UniversalEmoji-Paper-Legacy-1.10-1.18-2.0.0-beta.jar   # 1.10 - 1.18
+emoji-plugin-modern/target/UniversalEmoji-Paper-1.20+-2.0.0-beta.jar          # Paper 1.19 - 26.3
+emoji-plugin-spigot/target/UniversalEmoji-Spigot-1.20+-2.0.0-beta.jar        # Spigot 1.19 - 26.3
+emoji-plugin-legacy/target/UniversalEmoji-Paper-Legacy-1.10-1.18-2.0.0-beta.jar   # 1.10 - 1.18（Spigot/Paper 通用）
 ```
 
 ---
@@ -226,14 +228,26 @@ Bukkit.getServer().sendMessage(newLine);        // 服务器系统消息，不�
 
 ---
 
-## 八、目录
+## 八、遇到问题怎么改
+
+这份代码刻意做成了「坏了好修」的形状：
+
+- **先看日志**：启动时应有 `[UniversalEmoji] Universal Emoji ready: 3582 sequences …`。没有这行，就是三张码表没读到；有这行但游戏里还是方块，就是资源包 URL / SHA-1 没对上。
+- **分层很浅**：`emoji-core` 只做纯逻辑（解析、交集、最长匹配，带单测），插件模块各只有三个类——入口 `*Plugin`、聊天监听 `*ChatListener`、资源包下发 `*PackPusher`。改算法只动 core，改服端适配只动对应模块。
+- **注释全英文、每个类的职责写在类注释里**，报错和文件名一起贴出来就能直接定位。
+- **遇到不会改的报错，可以直接丢给 AI**：把 `mvn` 报错、服务端堆栈、或「某个 emoji 显示不出来」这类现象贴上来，附上对应模块文件名，基本一轮能修。编译命令只有一条：`mvn -B package`（JDK 21）。
+
+---
+
+## 九、目录
 
 ```
 Minecraft-TriEmoji/
 ├── tools/build_unified.py        # 图集 + 资源包 + 三端表
 ├── emoji-core/                   # 纯 Java 解析核心（有单测）
-├── emoji-plugin-modern/          # Paper 1.19.4 - 26.3
-├── emoji-plugin-legacy/          # Spigot/Paper 1.10 - 1.15
+├── emoji-plugin-modern/          # Paper 1.19 - 26.3
+├── emoji-plugin-spigot/          # Spigot 1.19 - 26.3（纯 Bukkit API）
+├── emoji-plugin-legacy/          # Spigot/Paper 1.10 - 1.18
 ├── dist/                         # 构建产物
 └── docs/                         # 架构与部署细节
 ```

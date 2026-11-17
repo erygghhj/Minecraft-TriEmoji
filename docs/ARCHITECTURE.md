@@ -93,8 +93,11 @@ for each cluster in text:
 | 版本段 | 模块 | 聊天事件 | 资源包 | 说明 |
 | --- | --- | --- | --- | --- |
 | 1.10 – 1.15 | `emoji-plugin-legacy` | `AsyncPlayerChatEvent` | `Universal_Emoji_legacy.zip` | 无签名，`setMessage` 即可 |
-| 1.16 – 1.18 | `emoji-plugin-modern` | `AsyncChatEvent` | 同上（legacy 包） | `setResourcePack` 走反射回退 |
-| 1.19.4 – 26.3 | `emoji-plugin-modern` | `AsyncChatEvent` | `Universal_Emoji.zip` | cancel + 重广播，绕开签名 |
+| 1.16 – 1.18 | `emoji-plugin-legacy` | `AsyncPlayerChatEvent` | 同上（legacy 包） | `setResourcePack` 走反射回退 |
+| 1.19 – 1.19.4（Paper） | `emoji-plugin-modern` | `AsyncChatEvent` | `Universal_Emoji_legacy.zip` | cancel + 重广播，绕开签名 |
+| 1.20 – 26.3（Paper） | `emoji-plugin-modern` | `AsyncChatEvent` | `Universal_Emoji.zip` | 字体为 `reference` 结构 |
+| 1.19 – 1.19.4（Spigot） | `emoji-plugin-spigot` | `AsyncPlayerChatEvent` | `Universal_Emoji_legacy.zip` | 纯 Bukkit，反射下发资源包 |
+| 1.20 – 26.3（Spigot） | `emoji-plugin-spigot` | `AsyncPlayerChatEvent` | `Universal_Emoji.zip` | 字节码零 `io.papermc` / `net.kyori` 引用 |
 
 > 1.16–1.18 也可以用 modern jar：`setResourcePack` 有 4 级签名回退，`AsyncChatEvent` 自 1.16.5 起存在。只是 `api-version: 1.19` 会被 1.18 服务端拒绝，需要把 `plugin.yml` 改成 `1.16` 重新打包。
 

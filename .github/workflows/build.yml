@@ -21,8 +21,9 @@ jobs:
         run: python tools/build_unified.py --out dist
       - name: sync tables into plugin resources
         run: |
-          cp dist/ios.txt dist/android.txt dist/windows.txt emoji-plugin-modern/src/main/resources/
-          cp dist/ios.txt dist/android.txt dist/windows.txt emoji-plugin-legacy/src/main/resources/
+          for m in emoji-plugin-modern emoji-plugin-legacy emoji-plugin-spigot; do
+            cp dist/ios.txt dist/android.txt dist/windows.txt "$m/src/main/resources/"
+          done
       - uses: actions/upload-artifact@v4
         with:
           name: resource-packs
@@ -52,5 +53,6 @@ jobs:
         with:
           name: plugins
           path: |
-            emoji-plugin-modern/target/UniversalEmoji-*.jar
-            emoji-plugin-legacy/target/UniversalEmoji-Legacy-*.jar
+            emoji-plugin-modern/target/UniversalEmoji-Paper-1.20+-*.jar
+            emoji-plugin-spigot/target/UniversalEmoji-Spigot-1.20+-*.jar
+            emoji-plugin-legacy/target/UniversalEmoji-Paper-Legacy-1.10-1.18-*.jar
