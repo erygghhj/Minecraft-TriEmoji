@@ -50,7 +50,7 @@
 ```yaml
 resourcepack:
   url: "https://你的域名/Universal_Emoji.zip"
-  sha1: "f2ce2a2617212aafd1ee19e4216f085d86ec3f40"
+  sha1: "ba8b4588060fe6bd45f51ec9bd5460be785bd75c"
   force: true
 ```
 
@@ -58,8 +58,8 @@ resourcepack:
 
 当前两个资源包的 SHA-1：
 
-- `Universal_Emoji.zip` → `f2ce2a2617212aafd1ee19e4216f085d86ec3f40`
-- `Universal_Emoji_legacy.zip` → `a04cc1e49a641593f11f542fc315590a96b332d5`
+- `Universal_Emoji.zip` → `ba8b4588060fe6bd45f51ec9bd5460be785bd75c`
+- `Universal_Emoji_legacy.zip` → `2d461f9a75873b82efe201e066b981f837e521c8`
 
 ## 覆盖范围
 

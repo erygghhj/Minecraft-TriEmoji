@@ -1,5 +1,28 @@
 # Changelog
 
+## 2.0.0-beta.1 — 2026-11-17
+
+修复资源包在 1.21.9 及以上完全无法加载的问题（用户实测 1.21.11 客户端提示“已损坏或不兼容”“重载资源包失败”）。
+
+### 修复：pack.mcmeta 用错字段
+- 1.21.9 起 Mojang 删除了 `supported_formats`，改由 `min_format` / `max_format` 描述兼容区间。
+- `modern` 包改成 `pack_format: 15` + `min_format` / `max_format: 15..999`，覆盖 1.20 – 26.3。
+- `legacy` 包改成 `pack_format: 4` + `supported_formats: 4..9`，覆盖 1.13 – 1.19，并**移除全部 `reference` 类型**（`reference` 是 1.20 才引入的，1.13 – 1.19 不认识，会被整包判失败）。
+
+### 修复：图集过高导致加载失败
+- 原来的单张 `universal_emoji.png` 是 512×7680，部分客户端加载不了。
+- 现在按 16 行一片切成 **15 张 512×512** 分片，`default.json` 用 15 个 `bitmap` provider 分别指过去，字符总数不变（3840）。
+
+### 调整：版本下限
+- 资源包机制从 **1.13** 起才存在（`assets/minecraft/font/default.json` 是 1.13 引入的）。
+- 1.10 – 1.12 客户端在机制层面无法通过资源包新增字形，文档已改为 **1.13 – 26.3**，并写明 1.10 – 1.12 的退化表现（emoji 显示为方块）。
+- legacy 资源包覆盖范围扩到 1.19（原先只到 1.18）。
+
+### 同步
+- 两个资源包的 SHA-1 变了：modern `ba8b4588…`、legacy `2d461f9a…`。
+- 四个 jar 内默认 `config.yml` 的 `sha1` 已同步，`dist/manifest.json`、README、RELEASE_NOTES 一并更新。
+- 四个 jar 用 JDK 21 重新编译：P 版 class 65、S 版 class 61、Legacy class 52。
+
 ## 2.0.0-beta — 2026-11-15
 
 版本号进入 2.0 序列。本版在原有 Paper / Legacy 两支之外新增 Spigot 分支。

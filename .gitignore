@@ -6,3 +6,4 @@ build_spigot/
 .vscode/
 dist/*.png
 dist/sha1.txt
+build/

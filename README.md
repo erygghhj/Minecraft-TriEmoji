@@ -2,7 +2,7 @@
 
 > **内存要求**：插件本体实测约 4–10 MB 堆（三端码表 3,835 / 3,838 / 3,585 条全部载入、做完交集与排序后，GC 后占用 4 MB）；服务器整体最低 1 GB，建议 2 GB 以上，26.3 建议 4 GB。资源包 6 MB 由客户端下载，不占服务端内存。
 
-Minecraft Java 版 **1.10 → 26.3** 的完整 Emoji 聊天系统。纯服务端 + 资源包方案，不依赖任何客户端模组。
+Minecraft Java 版 **1.13 → 26.3** 的完整 Emoji 聊天系统。纯服务端 + 资源包方案，不依赖任何客户端模组。
 
 聊天里打出原生 emoji（`😂`、`👨‍👩‍👧`、`❤️`），或者直接写坐标 `[1.3]`，都会在游戏内渲染成真正的彩色图标。
 
@@ -50,17 +50,24 @@ Minecraft Java 版 **1.10 → 26.3** 的完整 Emoji 聊天系统。纯服务端
 
 | 《我的世界》Java 版 | 资源包 | 插件 | 说明 |
 | --- | --- | --- | --- |
-| 1.10 – 1.15 | `Universal_Emoji_legacy.zip` | `UniversalEmoji-Paper-Legacy-1.10-1.18-2.0.0-beta.jar` | `AsyncPlayerChatEvent`，无聊天签名 |
+| 1.13 – 1.15 | `Universal_Emoji_legacy.zip` | `UniversalEmoji-Paper-Legacy-1.10-1.18-2.0.0-beta.jar` | `AsyncPlayerChatEvent`，无聊天签名 |
 | 1.16 – 1.18 | `Universal_Emoji_legacy.zip` | `UniversalEmoji-Paper-Legacy-1.10-1.18-2.0.0-beta.jar` | `api-version: 1.13`，事件仍是标准路径 |
 | 1.19 – 1.19.4 | `Universal_Emoji_legacy.zip` | **P 版**：`UniversalEmoji-Paper-1.20+-2.0.0-beta.jar`<br>**S 版**：`UniversalEmoji-Spigot-1.20+-2.0.0-beta.jar` | 1.19 起有聊天签名，取消事件后由服务端重新广播 |
 | 1.20 – 26.3 | `Universal_Emoji.zip` | **P 版**：`UniversalEmoji-Paper-1.20+-2.0.0-beta.jar`<br>**S 版**：`UniversalEmoji-Spigot-1.20+-2.0.0-beta.jar` | P 版走 `AsyncChatEvent`，S 版走 `AsyncPlayerChatEvent` |
 
-两份资源包的差别只在字体 JSON 的写法，图集本身逐字节相同：
+> **1.10 – 1.12 为什么不在表里**：这一代客户端还没有 `assets/minecraft/font/default.json` 这套字体提供者系统（1.13 才引入），资源包在机制层面无法给客户端新增字形。要在 1.10 – 1.12 显示 emoji，只能走替换 `textures/font/unicode_page_*.png` 的老路子，那是另一套图集切分方式，本版没有提供。**插件本身（legacy 版）在 1.10 – 1.12 依然能正常跑**，只是 emoji 会退化成方块或空白。
 
-- `legacy`：1.16.5 的原版结构（内联 `bitmap` + `legacy_unicode`）
-- `modern`：1.21.4 的原版结构（三个 `reference` + 自己的 `bitmap`）
+两份资源包的差别在字体 JSON 的写法，图集内容完全相同：
 
-`pack.mcmeta` 同时声明 `pack_format: 1` 和 `supported_formats: 1..999`，所以任何版本都不会弹“不兼容”。
+- `legacy`：`bitmap` + `legacy_unicode` 全部内联（1.13 – 1.19 不认识 `reference` 类型，不能用引用写法）
+- `modern`：三个 `reference`（1.20 才支持 `reference`）+ 自己的分片 `bitmap`
+
+`pack.mcmeta` 按客户端实际支持的字段分开写：
+
+- `legacy`：`pack_format: 4` + `supported_formats: 4..9`（1.13 – 1.19）
+- `modern`：`pack_format: 15` + `min_format` / `max_format: 15..999`（**1.21.9 起 Mojang 删掉了 `supported_formats`，改用 `min_format` / `max_format`**，写老字段会被判“不兼容/已损坏”）
+
+图集也拆成了 **15 张 512×512** 的分片（原来是一张 512×7680 的长条），避免部分客户端因为单张纹理过高而直接加载失败。
 
 **实测起服验证过的**：Paper 1.21.11（build 132）、Paper 26.3（build 252，Java 25）。
 **Spigot 版（S 版）目前只有静态验证**（字节码零 `io.papermc` / `net.kyori` 引用、jar 条目齐全、下载链路 200），还没有在真实 Spigot 服起过服。
@@ -133,7 +140,7 @@ emoji-plugin-legacy/target/UniversalEmoji-Paper-Legacy-1.10-1.18-2.0.0-beta.jar 
 ```yaml
 resourcepack:
   url: "https://你的域名/Universal_Emoji.zip"
-  sha1: "f2ce2a2617212aafd1ee19e4216f085d86ec3f40"
+  sha1: "ba8b4588060fe6bd45f51ec9bd5460be785bd75c"
   force: true
 ```
 
