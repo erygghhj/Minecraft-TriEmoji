@@ -10,6 +10,15 @@
 - 资源包下发改成反射查找 `setResourcePack` 重载（4 参 → 3 参 → 2 参），一份 jar 覆盖 1.19 – 26.3。
 - 产物 `UniversalEmoji-Spigot-2.0.0-beta.jar`，`api-version: 1.19`，class 版本 61（Java 17）。
 
+### 文件命名统一
+- 四个 jar 统一成 `<服端>-<版本范围>-<版本号>`：
+  - `UniversalEmoji-Paper-1.20+-2.0.0-beta.jar`（Paper 1.19 – 26.3）
+  - `UniversalEmoji-Spigot-1.20+-2.0.0-beta.jar`（Spigot 1.19 – 26.3）
+  - `UniversalEmoji-Paper-Legacy-1.10-1.18-2.0.0-beta.jar`
+  - `UniversalEmoji-Spigot-Legacy-1.10-1.18-2.0.0-beta.jar`
+- 两个 Legacy 包字节相同（SHA-1 `fba4d11184424bb188c35f1fcaba73338643f498`），同一份代码同时兼容 Spigot 与 Paper 1.10 – 1.18，按服端挑名字即可。
+- 三个模块 pom 的 `finalName` 同步改掉，源码重新 `mvn package` 会产出完全一样的文件名。
+
 ### 变更
 - `plugin.yml` 描述更正为 `Paper 1.19 - 26.3` 与 `Spigot/Paper 1.10 - 1.18`，`website` 指向真实仓库。
 - README 新增「适配版本（《我的世界》Java 版）」矩阵，明确资源包为强制依赖。

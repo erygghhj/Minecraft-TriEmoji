@@ -31,7 +31,7 @@
     </dependencies>
 
     <build>
-        <finalName>UniversalEmoji-Legacy-${project.version}</finalName>
+        <finalName>UniversalEmoji-Paper-Legacy-1.10-1.18-${project.version}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

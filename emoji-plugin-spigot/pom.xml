@@ -33,7 +33,7 @@
     </dependencies>
 
     <build>
-        <finalName>UniversalEmoji-Spigot-${project.version}</finalName>
+        <finalName>UniversalEmoji-Spigot-1.20+-${project.version}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
