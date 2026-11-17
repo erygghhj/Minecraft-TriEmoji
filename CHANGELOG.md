@@ -1,5 +1,22 @@
 # Changelog
 
+## 2.1.0 — 2026-11-17
+
+版本号从 2.0 升到 2.1，同时把“每次有 bug 都要手动改包重传”这件事交给 CI。
+
+### 新增：自动出包 + 自动发布
+- `.github/workflows/build.yml` 现在有三个 job：`pack`（生成两份资源包和平台表）、`plugin`（Maven 编译三个模块）、`release`（仅在推 `v*` 标签时触发）。
+- 推一个 `v*` 标签，CI 会自动把 6 个产物（4 个 jar + 2 个 zip）挂到对应的 GitHub Release 上，不需要再手工上传。
+- CI 构建完成后会重新计算资源包 SHA-1，并**自动写回三个模块的默认 `config.yml`**，保证 jar 里的默认校验值永远和包一致。
+
+### 修复：CI 会覆盖资源包修复
+- `tools/build_unified.py` 原先写的是旧版 `pack.mcmeta`（`pack_format: 1` + `supported_formats 1..999`）和一张 512×7680 的长图集，只要 CI 跑一次就会把手工修复顶掉。
+- 现在脚本自己产出 `pack_format: 15` + `min_format`/`max_format: 15..999`（modern）和 `pack_format: 4` + `supported_formats 4..9`（legacy），图集也按 15 张 512×512 分片输出。
+
+### 变更：版本号
+- `pom.xml`（父工程与三个模块）、三个 `plugin.yml`、`README`、`RELEASE_NOTES` 全部改为 `2.1.0`。
+- 产物名同步为 `UniversalEmoji-{Paper,Spigot}-1.20+-2.1.0.jar`、`UniversalEmoji-Paper-Legacy-1.10-1.18-2.1.0.jar`、`UniversalEmoji-Spigot-Legacy-1.10-1.18-2.1.0.jar`。
+
 ## 2.0.0-beta.1 — 2026-11-17
 
 修复资源包在 1.21.9 及以上完全无法加载的问题（用户实测 1.21.11 客户端提示“已损坏或不兼容”“重载资源包失败”）。
