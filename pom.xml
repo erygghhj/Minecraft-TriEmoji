@@ -17,6 +17,7 @@
         <module>emoji-core</module>
         <module>emoji-plugin-modern</module>
         <module>emoji-plugin-legacy</module>
+        <module>emoji-plugin-spigot</module>
     </modules>
 
     <properties>

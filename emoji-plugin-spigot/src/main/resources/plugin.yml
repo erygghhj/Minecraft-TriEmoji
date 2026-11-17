@@ -1,0 +1,7 @@
+name: UniversalEmoji
+version: '2.0.0-beta'
+main: io.github.universalemoji.spigot.SpigotEmojiPlugin
+api-version: '1.19'
+description: PUA bitmap emoji chat for Spigot 1.19 - 26.3 (Bukkit API only, no Paper classes)
+authors: [UniversalEmoji]
+website: https://github.com/erygghhj/Minecraft-TriEmoji

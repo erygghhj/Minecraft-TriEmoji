@@ -2,7 +2,13 @@
 
 ## 2.0.0-beta — 2026-11-15
 
-版本号进入 2.0 序列。功能逻辑与 1.0.0 相同，本版只改元数据与文档。
+版本号进入 2.0 序列。本版在原有 Paper / Legacy 两支之外新增 Spigot 分支。
+
+### 新增：S 版（Spigot 1.19 – 26.3）
+- 新模块 `emoji-plugin-spigot`，只用 `org.bukkit` API，字节码里零 `io.papermc` / `net.kyori` / `net.md_5` 引用。
+- 聊天监听改用 `AsyncPlayerChatEvent`，异步线程只取字符串，广播回主线程执行，继续绕开 1.19+ 聊天签名。
+- 资源包下发改成反射查找 `setResourcePack` 重载（4 参 → 3 参 → 2 参），一份 jar 覆盖 1.19 – 26.3。
+- 产物 `UniversalEmoji-Spigot-2.0.0-beta.jar`，`api-version: 1.19`，class 版本 61（Java 17）。
 
 ### 变更
 - `plugin.yml` 描述更正为 `Paper 1.19 - 26.3` 与 `Spigot/Paper 1.10 - 1.18`，`website` 指向真实仓库。

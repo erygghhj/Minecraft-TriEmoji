@@ -1,4 +1,5 @@
 target/
+build_spigot/
 .cache/
 *.iml
 .idea/

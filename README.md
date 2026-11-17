@@ -23,6 +23,7 @@ Minecraft Java 版 **1.10 → 26.3** 的完整 Emoji 聊天系统。纯服务端
 | [`Universal_Emoji_legacy.zip`](https://github.com/erygghhj/Minecraft-TriEmoji/raw/main/dist/Universal_Emoji_legacy.zip) | 1.10 – 1.19.4 | 资源包（**必装**） |
 | [`UniversalEmoji-2.0.0-beta.jar`](https://github.com/erygghhj/Minecraft-TriEmoji/raw/main/release/UniversalEmoji-2.0.0-beta.jar) | Paper 1.19 – 26.3 | 插件 |
 | [`UniversalEmoji-Legacy-2.0.0-beta.jar`](https://github.com/erygghhj/Minecraft-TriEmoji/raw/main/release/UniversalEmoji-Legacy-2.0.0-beta.jar) | Spigot/Paper 1.10 – 1.18 | 插件 |
+| [`UniversalEmoji-Spigot-2.0.0-beta.jar`](https://github.com/erygghhj/Minecraft-TriEmoji/raw/main/release/UniversalEmoji-Spigot-2.0.0-beta.jar) | Spigot **1.19 – 26.3** | 插件（S 版） |
 
 资源包和插件必须成对使用，只装插件不装包，游戏里只会显示空白方块。
 
@@ -36,6 +37,7 @@ Minecraft Java 版 **1.10 → 26.3** 的完整 Emoji 聊天系统。纯服务端
 | `emoji-core` | 三端校验 + 最长匹配算法（纯 Java，不碰服务端 API） | Maven 模块 |
 | `emoji-plugin-modern` | Paper 1.19 - 26.3 的插件（AsyncChatEvent + 绕开聊天签名） | Maven 模块 |
 | `emoji-plugin-legacy` | Spigot/Paper 1.10 - 1.18 的插件（AsyncPlayerChatEvent） | Maven 模块 |
+| `emoji-plugin-spigot` | Spigot 1.19 - 26.3 的插件（纯 Bukkit，反射下发资源包） | Maven 模块 |
 
 当前构建：**3838 个 emoji**，16 列 × 240 行，PUA 占用 `U+E000 .. U+EFFF`。
 
@@ -50,8 +52,8 @@ Minecraft Java 版 **1.10 → 26.3** 的完整 Emoji 聊天系统。纯服务端
 | --- | --- | --- | --- |
 | 1.10 – 1.15 | `Universal_Emoji_legacy.zip` | `UniversalEmoji-Legacy-2.0.0-beta.jar` | `AsyncPlayerChatEvent`，无聊天签名 |
 | 1.16 – 1.18 | `Universal_Emoji_legacy.zip` | `UniversalEmoji-Legacy-2.0.0-beta.jar` | `api-version: 1.13`，事件仍是标准路径 |
-| 1.19 – 1.19.4 | `Universal_Emoji_legacy.zip` | `UniversalEmoji-2.0.0-beta.jar` | 1.19 起 `AsyncChatEvent` 可用 |
-| 1.20 – 26.3 | `Universal_Emoji.zip` | `UniversalEmoji-2.0.0-beta.jar` | 字体改为 `reference` 结构 |
+| 1.19 – 1.19.4 | `Universal_Emoji_legacy.zip` | **P 版**：`UniversalEmoji-2.0.0-beta.jar`<br>**S 版**：`UniversalEmoji-Spigot-2.0.0-beta.jar` | 1.19 起有聊天签名，取消事件后由服务端重新广播 |
+| 1.20 – 26.3 | `Universal_Emoji.zip` | **P 版**：`UniversalEmoji-2.0.0-beta.jar`<br>**S 版**：`UniversalEmoji-Spigot-2.0.0-beta.jar` | P 版走 `AsyncChatEvent`，S 版走 `AsyncPlayerChatEvent` |
 
 两份资源包的差别只在字体 JSON 的写法，图集本身逐字节相同：
 

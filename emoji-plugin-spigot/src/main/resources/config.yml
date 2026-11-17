@@ -1,0 +1,17 @@
+# Universal Emoji
+# The client downloads the pack itself. Never point this at a local file:
+# only the URL + SHA-1 travel to the client.
+
+resourcepack:
+  url: "https://example.com/Universal_Emoji.zip"
+  sha1: "f2ce2a2617212aafd1ee19e4216f085d86ec3f40"
+  prompt: "Universal Emoji 资源包"
+  force: true
+
+emoji:
+  # 16 columns is what tools/build_unified.py writes. Change both together.
+  columns: 16
+  unsupported-text: "[不支持的表情]"
+  # %player% and %message% placeholders
+  broadcast-format: "<%player%> %message%"
+  debug: false
