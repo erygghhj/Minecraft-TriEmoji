@@ -252,6 +252,11 @@ Minecraft-TriEmoji/
 └── docs/                         # 架构与部署细节
 ```
 
+## 作者
+
+- GitHub：[@erygghhj](https://github.com/erygghhj)
+- 邮箱：3870117206@qq.com
+
 ## License
 
 MIT
