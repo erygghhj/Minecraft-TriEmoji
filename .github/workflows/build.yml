@@ -7,41 +7,61 @@ on:
   pull_request:
   workflow_dispatch:
 
+# The packs in dist/ are the single source of truth: their SHA-1 is what every
+# jar ships as the default, what the CDN serves, and what the release carries.
+# Rebuilding the atlas inside CI would give the same pixels but a different zip
+# byte stream (timestamps), and then a jar from the release would reject a pack
+# from the CDN. So CI verifies and reuses them, it does not regenerate them.
+# Run `python tools/build_unified.py --out dist` locally when the artwork,
+# tables or pack.mcmeta actually change, then commit the result.
+
 jobs:
-  pack:
-    name: resource pack
+  verify:
+    name: verify packs
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: python -m pip install --upgrade Pillow requests
-      - name: build pack + tables
-        run: python tools/build_unified.py --out dist
-      - name: sync tables into plugin resources
-        run: |
-          for m in emoji-plugin-modern emoji-plugin-legacy emoji-plugin-spigot; do
-            cp dist/ios.txt dist/android.txt dist/windows.txt "$m/src/main/resources/"
-          done
-      - name: sync pack sha1 into the default configs
+      - name: packs are present and match every default config
         run: |
           python3 - <<'PY'
-          import json, re, pathlib
-          m = json.loads(pathlib.Path("dist/manifest.json").read_text())
-          ms, ls = m["packs"]["modern"]["sha1"], m["packs"]["legacy"]["sha1"]
-          for p, sha in [
-              ("emoji-plugin-modern/src/main/resources/config.yml", ms),
-              ("emoji-plugin-spigot/src/main/resources/config.yml", ms),
-              ("emoji-plugin-legacy/src/main/resources/config.yml", ls),
+          import hashlib, json, pathlib, sys
+          dist = pathlib.Path("dist")
+          manifest = json.loads((dist / "manifest.json").read_text())
+          bad = []
+          for kind, cfg in [
+              ("modern", ["emoji-plugin-modern/src/main/resources/config.yml",
+                          "emoji-plugin-spigot/src/main/resources/config.yml"]),
+              ("legacy", ["emoji-plugin-legacy/src/main/resources/config.yml"]),
           ]:
-              f = pathlib.Path(p)
-              f.write_text(re.sub(r'sha1: "\w+"', f'sha1: "{sha}"', f.read_text()))
-          print("modern", ms)
-          print("legacy", ls)
+              pack = dist / manifest["packs"][kind]["file"]
+              data = pack.read_bytes()
+              sha = hashlib.sha1(data).hexdigest()
+              size = len(data)
+              ok_sha = manifest["packs"][kind]["sha1"] == sha
+              ok_size = manifest["packs"][kind]["size"] == size
+              print(f"{pack.name}: {size}B sha1={sha} manifest_ok={ok_sha and ok_size}")
+              if not (ok_sha and ok_size):
+                  bad.append(f"manifest mismatch for {pack.name}")
+              for c in cfg:
+                  text = pathlib.Path(c).read_text()
+                  if f'sha1: "{sha}"' not in text:
+                      bad.append(f"{c} does not carry {sha}")
+          if bad:
+              print("\n".join(bad))
+              sys.exit(1)
+          print("all packs consistent")
           PY
-      - name: print checksums
-        run: sha1sum dist/*.zip
+      - name: print the pack mcmeta of both packs
+        run: |
+          python3 - <<'PY'
+          import json, zipfile, pathlib
+          for f in sorted(pathlib.Path("dist").glob("*.zip")):
+              z = zipfile.ZipFile(f)
+              print(f.name, json.loads(z.read("pack.mcmeta"))["pack"])
+          PY
       - uses: actions/upload-artifact@v4
         with:
           name: resource-packs
@@ -53,27 +73,9 @@ jobs:
   plugin:
     name: plugin (JDK 21)
     runs-on: ubuntu-latest
-    needs: pack
+    needs: verify
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
-        with:
-          name: resource-packs
-          path: dist
-      - name: restore config sha1 from the freshly built pack
-        run: |
-          python3 - <<'PY'
-          import json, re, pathlib
-          m = json.loads(pathlib.Path("dist/manifest.json").read_text())
-          ms, ls = m["packs"]["modern"]["sha1"], m["packs"]["legacy"]["sha1"]
-          for p, sha in [
-              ("emoji-plugin-modern/src/main/resources/config.yml", ms),
-              ("emoji-plugin-spigot/src/main/resources/config.yml", ms),
-              ("emoji-plugin-legacy/src/main/resources/config.yml", ls),
-          ]:
-              f = pathlib.Path(p)
-              f.write_text(re.sub(r'sha1: "\w+"', f'sha1: "{sha}"', f.read_text()))
-          PY
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -81,6 +83,28 @@ jobs:
           cache: maven
       - name: compile + package
         run: mvn -B package
+      - name: every jar carries the same pack sha1 as dist
+        run: |
+          python3 - <<'PY'
+          import hashlib, pathlib, zipfile, sys
+          modern = hashlib.sha1(pathlib.Path("dist/Universal_Emoji.zip").read_bytes()).hexdigest()
+          legacy = hashlib.sha1(pathlib.Path("dist/Universal_Emoji_legacy.zip").read_bytes()).hexdigest()
+          expected = {"modern": modern, "legacy": legacy}
+          bad = []
+          for jar in sorted(pathlib.Path(".").glob("emoji-plugin-*/target/*.jar")):
+              z = zipfile.ZipFile(jar)
+              if "config.yml" not in z.namelist():
+                  continue
+              text = z.read("config.yml").decode()
+              kind = "legacy" if "legacy" in jar.parent.parent.name or "Legacy" in jar.name else "modern"
+              if f'sha1: "{expected[kind]}"' not in text:
+                  bad.append(f"{jar.name} does not carry the {kind} sha1")
+              else:
+                  print(f"{jar.name}: {kind} sha1 ok")
+          if bad:
+              print("\n".join(bad))
+              sys.exit(1)
+          PY
       - name: add the spigot naming variant of the legacy jar
         run: |
           set -e
@@ -97,12 +121,12 @@ jobs:
             emoji-plugin-legacy/target/UniversalEmoji-Paper-Legacy-*.jar
             emoji-plugin-legacy/target/UniversalEmoji-Spigot-Legacy-*.jar
 
-  # Pushing a v* tag is all it takes from here on: the two jobs above build
+  # Pushing a v* tag is all it takes from here on: the jobs above build
   # everything, this one publishes it. No manual re-upload of jars or packs.
   release:
     name: publish
     runs-on: ubuntu-latest
-    needs: [pack, plugin]
+    needs: [verify, plugin]
     if: startsWith(github.ref, 'refs/tags/v')
     permissions:
       contents: write
@@ -127,6 +151,7 @@ jobs:
         with:
           prerelease: ${{ contains(github.ref_name, '-') }}
           body_path: RELEASE_NOTES.md
+          overwrite_files: true
           files: |
             out/*.jar
             out/*.zip
