@@ -1,6 +1,6 @@
 # Universal Emoji 2.1.0
 
-《我的世界》Java 版 **1.10 → 26.3** 的 Emoji 聊天系统。服务端把原生 emoji 换成私用区字符，客户端靠资源包渲染成彩色图标，不需要任何客户端模组。
+《我的世界》Java 版 **1.13 → 26.3** 的 Emoji 聊天系统。服务端把原生 emoji 换成私用区字符，客户端靠资源包渲染成彩色图标，不需要任何客户端模组。
 
 ## 下载后请成对使用
 
@@ -21,19 +21,18 @@
 | `Universal_Emoji.zip` | **资源包（必需）**（1.20 – 26.3） |
 | `Universal_Emoji_legacy.zip` | **资源包（必需）**（1.19 – 1.19.4） |
 
-### 分组三：1.10 – 1.18（老版本服）
+### 分组三：1.13 – 1.18（老版本服）
 
 | 文件 | 类型 |
 | --- | --- |
-| `UniversalEmoji-Paper-Legacy-1.10-1.18-2.1.0.jar` | 插件（Spigot/Paper 1.10 – 1.18） |
+| `UniversalEmoji-Paper-Legacy-1.10-1.18-2.1.0.jar` | 插件（Spigot/Paper 1.13 – 1.18；文件名沿用历史命名） |
 | `Universal_Emoji_legacy.zip` | **资源包（必需）** |
 
 ## 《我的世界》版本对照
 
 | 游戏版本 | 资源包 | 插件 | 说明 |
 | --- | --- | --- | --- |
-| 1.10 – 1.15 | `Universal_Emoji_legacy.zip` | `UniversalEmoji-Paper-Legacy-1.10-1.18-2.1.0.jar` | `AsyncPlayerChatEvent`，无聊天签名 |
-| 1.16 – 1.18 | `Universal_Emoji_legacy.zip` | `UniversalEmoji-Paper-Legacy-1.10-1.18-2.1.0.jar` | `api-version: 1.13` |
+| 1.13 – 1.18 | `Universal_Emoji_legacy.zip` | `UniversalEmoji-Paper-Legacy-1.10-1.18-2.1.0.jar` | `AsyncPlayerChatEvent`，无聊天签名；`api-version: 1.13` |
 | 1.19 – 1.19.4 | `Universal_Emoji_legacy.zip` | **P 版** `UniversalEmoji-Paper-1.20+-2.1.0.jar`<br>**S 版** `UniversalEmoji-Spigot-1.20+-2.1.0.jar` | 1.19 起有聊天签名，取消事件后由服务端重新广播 |
 | 1.20 – 26.3 | `Universal_Emoji.zip` | **P 版** `UniversalEmoji-Paper-1.20+-2.1.0.jar`<br>**S 版** `UniversalEmoji-Spigot-1.20+-2.1.0.jar` | P 版走 `AsyncChatEvent`，S 版走 `AsyncPlayerChatEvent` |
 
@@ -64,7 +63,7 @@ resourcepack:
 ## 覆盖范围
 
 - 图集 512 × 7680，16 列 × 240 行，每格 32px，共 3,838 个 Twemoji 字形
-- 私用区 `U+E000 .. U+EFFF`，实际用到 `U+E000 .. U+EEFD`
+- 私用区 `U+E000 .. U+EEFF`，实际用到 `U+E000 .. U+EEFD`
 - 三端交叉校验：iOS 3,835 / Android 3,838 / Windows 3,585，**交集 3,582** 个可安全渲染
 - 缺端直接降级为 `[不支持的表情]`，不会给玩家空白方块
 
@@ -72,7 +71,7 @@ resourcepack:
 
 - Paper 1.21.11（build 132）：加载 3,582 sequences，PUA `U+E000..U+EEFD`
 - Paper 26.3（build 252，Java 25）：同样加载成功，无 `NoSuchMethodError`
-- `mvn package` 三模块全 SUCCESS，11 个单元测试通过
+- `mvn package` 三模块全 SUCCESS，13 个单元测试通过
 
 ## 已知限制
 

@@ -1,6 +1,7 @@
 package io.github.universalemoji.legacy;
 
 import java.util.Locale;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -26,6 +27,17 @@ public final class LegacyPackPusher implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onJoin(PlayerJoinEvent event) {
         push(event.getPlayer());
+    }
+
+    /**
+     * Re-sends the pack to players that are already online: without this a
+     * {@code /reload} (plugin re-enabled) leaves them without the pack until
+     * they reconnect.
+     */
+    public void pushAll() {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            push(player);
+        }
     }
 
     private void push(Player player) {

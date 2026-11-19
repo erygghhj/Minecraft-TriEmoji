@@ -32,7 +32,7 @@ public final class SpigotChatListener implements Listener {
         this.processor = processor;
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onChat(AsyncPlayerChatEvent event) {
         String plain = event.getMessage();
         EmojiTextProcessor.Result result = processor.process(plain);
@@ -44,21 +44,21 @@ public final class SpigotChatListener implements Listener {
 
         event.setCancelled(true);
 
-        String format = plugin.getConfig().getString("emoji.broadcast-format", "<%player%> %message%");
-        final String line = format
-                .replace("%player%", event.getPlayer().getName())
-                .replace("%message%", result.text());
-
-        final boolean debug = plugin.getConfig().getBoolean("emoji.debug", false);
         final String who = event.getPlayer().getName();
+        final String text = result.text();
 
-        // async thread: only strings cross over, everything else runs on main
+        // async thread: only strings cross over, config and the broadcast run on the main thread
         Bukkit.getScheduler().runTask(plugin, () -> {
+            String format = plugin.getConfig().getString("emoji.broadcast-format", "<%player%> %message%");
+            String line = format
+                    .replace("%player%", who)
+                    .replace("%message%", text);
+
             for (Player player : Bukkit.getOnlinePlayers()) {
                 player.sendMessage(line);
             }
             Bukkit.getConsoleSender().sendMessage(line);
-            if (debug) {
+            if (plugin.getConfig().getBoolean("emoji.debug", false)) {
                 plugin.getLogger().info(who + " " + result);
             }
         });

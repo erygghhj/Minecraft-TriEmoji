@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>universal-emoji-plugin-legacy</artifactId>
-    <name>Universal Emoji :: Plugin (1.10 - 1.15)</name>
+    <name>Universal Emoji :: Plugin (Legacy 1.13 - 1.18)</name>
 
     <properties>
         <maven.compiler.release>8</maven.compiler.release>

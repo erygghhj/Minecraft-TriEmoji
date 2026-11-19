@@ -1,5 +1,29 @@
 # Changelog
 
+## 未发布
+
+### 新增：告示牌与书页转换
+- 三个模块各加一个 `*ContentListener`：监听 `SignChangeEvent` 与 `PlayerEditBookEvent`，把告示牌四行、书与笔每一页里的 emoji 同样换成 PUA 字形。只用了跨版本稳定的 `String` API（`getLine`/`setLine`、`BookMeta#getPages`），1.13 – 26.3 通用。
+- 局限：只在玩家编辑提交时处理，命令或其他插件直接写入的内容不会二次转换（见 README「已知限制」）。
+
+### 修复：普通符号被误判成 emoji
+- 原先按 Unicode 区间（2190–21FF、2600–27BF、2900–297F 等）判断“像 emoji”，导致聊天里的 `→ ★ ♪` 被替换成 `[不支持的表情]`。现在改为查三张平台表里真实出现过的码点，普通符号原样保留。
+
+### 修复：旗帜被拆成两个字母
+- `clusterEnd` 现在把一对区域指示符（`1F1E6–1F1FF`）当作一个簇，`🇨🇳` 命中 `1f1e8-1f1f3` 整旗字形。
+
+### 修复：禁言绕过与异步线程
+- 现代版与 Spigot 版监听改为 `ignoreCancelled = true`，被其他插件取消（禁言/过滤）的消息不再被重播。
+- 现代版不再在 `AsyncChatEvent` 线程里读配置、发消息，统一 `runTask` 回主线程；Spigot 版同样把配置读取挪进主线程任务。
+
+### 修复：reload 后不下发资源包
+- 三个 `*PackPusher` 增加 `pushAll()`，`onEnable` 时对已在线玩家补推，`/reload` 后不用重连也能拿到包。
+
+### 文档：legacy 支持范围更正为 1.13 – 1.18
+- `1.10` 是遗留笔误。1.10 – 1.12 没有 `font/default.json` 字体提供者系统，资源包在机制上无法新增字形，不在支持范围。
+- 同步更正父 `pom.xml` 描述、legacy 模块名、`plugin.yml` / `config.yml` 注释、README、RELEASE_NOTES、ARCHITECTURE；产物文件名保持不变（CI/Release 链接依赖它）。
+- README 的 PUA 区间笔误 `U+EFFF` 改为 `U+EEFF`。
+
 ## 2.1.0 — 2026-11-17
 
 版本号从 2.0 升到 2.1，同时把“每次有 bug 都要手动改包重传”这件事交给 CI。

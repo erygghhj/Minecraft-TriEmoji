@@ -44,7 +44,10 @@ public final class SpigotEmojiPlugin extends JavaPlugin {
         EmojiTextProcessor processor = new EmojiTextProcessor(table, unsupportedText);
 
         getServer().getPluginManager().registerEvents(new SpigotChatListener(this, processor), this);
-        getServer().getPluginManager().registerEvents(new SpigotPackPusher(this), this);
+        getServer().getPluginManager().registerEvents(new SpigotContentListener(processor), this);
+        SpigotPackPusher packPusher = new SpigotPackPusher(this);
+        getServer().getPluginManager().registerEvents(packPusher, this);
+        packPusher.pushAll();
 
         getLogger().info("Universal Emoji (Spigot build) ready: " + table.size()
                 + " sequences supported on iOS + Android + Windows, "

@@ -34,6 +34,7 @@ unified_sheet.png  512 × 7680，16 列 × 240 行，每格 32×32
                         │
                         ▼
                  ChatListener  cancel + Server#sendMessage
+                 ContentListener  告示牌 / 书页：原地改文本
 ```
 
 ## 3. 图集切分的硬约束
@@ -92,7 +93,7 @@ for each cluster in text:
 
 | 版本段 | 模块 | 聊天事件 | 资源包 | 说明 |
 | --- | --- | --- | --- | --- |
-| 1.10 – 1.15 | `emoji-plugin-legacy` | `AsyncPlayerChatEvent` | `Universal_Emoji_legacy.zip` | 无签名，`setMessage` 即可 |
+| 1.13 – 1.15 | `emoji-plugin-legacy` | `AsyncPlayerChatEvent` | `Universal_Emoji_legacy.zip` | 无签名，`setMessage` 即可 |
 | 1.16 – 1.18 | `emoji-plugin-legacy` | `AsyncPlayerChatEvent` | 同上（legacy 包） | `setResourcePack` 走反射回退 |
 | 1.19 – 1.19.4（Paper） | `emoji-plugin-modern` | `AsyncChatEvent` | `Universal_Emoji_legacy.zip` | cancel + 重广播，绕开签名 |
 | 1.20 – 26.3（Paper） | `emoji-plugin-modern` | `AsyncChatEvent` | `Universal_Emoji.zip` | 字体为 `reference` 结构 |

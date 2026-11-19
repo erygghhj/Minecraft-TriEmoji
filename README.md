@@ -4,7 +4,7 @@
 
 Minecraft Java 版 **1.13 → 26.3** 的完整 Emoji 聊天系统。纯服务端 + 资源包方案，不依赖任何客户端模组。
 
-聊天里打出原生 emoji（`😂`、`👨‍👩‍👧`、`❤️`），或者直接写坐标 `[1.3]`，都会在游戏内渲染成真正的彩色图标。
+聊天里打出原生 emoji（`😂`、`👨‍👩‍👧`、`❤️`），或者直接写坐标 `[1.3]`，都会在游戏内渲染成真正的彩色图标。告示牌文字和书与笔的页面在编辑完成时同样会转换（`SignChangeEvent` / `PlayerEditBookEvent`），三端一致。
 
 ```
 玩家: 今天好累 😂
@@ -20,9 +20,9 @@ Minecraft Java 版 **1.13 → 26.3** 的完整 Emoji 聊天系统。纯服务端
 | 文件 | 适用版本 | 类型 |
 | --- | --- | --- |
 | [`Universal_Emoji.zip`](https://github.com/erygghhj/Minecraft-TriEmoji/raw/main/dist/Universal_Emoji.zip) | 1.20 – 26.3 | 资源包（**必装**） |
-| [`Universal_Emoji_legacy.zip`](https://github.com/erygghhj/Minecraft-TriEmoji/raw/main/dist/Universal_Emoji_legacy.zip) | 1.10 – 1.19.4 | 资源包（**必装**） |
+| [`Universal_Emoji_legacy.zip`](https://github.com/erygghhj/Minecraft-TriEmoji/raw/main/dist/Universal_Emoji_legacy.zip) | 1.13 – 1.19.4 | 资源包（**必装**） |
 | [`UniversalEmoji-Paper-1.20+-2.1.0.jar`](https://github.com/erygghhj/Minecraft-TriEmoji/raw/main/release/UniversalEmoji-Paper-1.20+-2.1.0.jar) | Paper 1.19 – 26.3 | 插件 |
-| [`UniversalEmoji-Paper-Legacy-1.10-1.18-2.1.0.jar`](https://github.com/erygghhj/Minecraft-TriEmoji/raw/main/release/UniversalEmoji-Paper-Legacy-1.10-1.18-2.1.0.jar) | Spigot/Paper 1.10 – 1.18 | 插件 |
+| [`UniversalEmoji-Paper-Legacy-1.10-1.18-2.1.0.jar`](https://github.com/erygghhj/Minecraft-TriEmoji/raw/main/release/UniversalEmoji-Paper-Legacy-1.10-1.18-2.1.0.jar) | Spigot/Paper 1.13 – 1.18 | 插件 |
 | [`UniversalEmoji-Spigot-1.20+-2.1.0.jar`](https://github.com/erygghhj/Minecraft-TriEmoji/raw/main/release/UniversalEmoji-Spigot-1.20+-2.1.0.jar) | Spigot **1.19 – 26.3** | 插件（S 版） |
 
 资源包和插件必须成对使用，只装插件不装包，游戏里只会显示空白方块。
@@ -36,10 +36,10 @@ Minecraft Java 版 **1.13 → 26.3** 的完整 Emoji 聊天系统。纯服务端
 | `tools/build_unified.py` | 拉全量 Twemoji，拼成超长图集，生成资源包 + 三端码表 | `dist/` |
 | `emoji-core` | 三端校验 + 最长匹配算法（纯 Java，不碰服务端 API） | Maven 模块 |
 | `emoji-plugin-modern` | Paper 1.19 - 26.3 的插件（AsyncChatEvent + 绕开聊天签名） | Maven 模块 |
-| `emoji-plugin-legacy` | Spigot/Paper 1.10 - 1.18 的插件（AsyncPlayerChatEvent） | Maven 模块 |
+| `emoji-plugin-legacy` | Spigot/Paper 1.13 - 1.18 的插件（AsyncPlayerChatEvent） | Maven 模块 |
 | `emoji-plugin-spigot` | Spigot 1.19 - 26.3 的插件（纯 Bukkit，反射下发资源包） | Maven 模块 |
 
-当前构建：**3838 个 emoji**，16 列 × 240 行，PUA 占用 `U+E000 .. U+EFFF`。
+当前构建：**3838 个 emoji**，16 列 × 240 行，PUA 占用 `U+E000 .. U+EEFF`。
 
 ---
 
@@ -55,7 +55,7 @@ Minecraft Java 版 **1.13 → 26.3** 的完整 Emoji 聊天系统。纯服务端
 | 1.19 – 1.19.4 | `Universal_Emoji_legacy.zip` | **P 版**：`UniversalEmoji-Paper-1.20+-2.1.0.jar`<br>**S 版**：`UniversalEmoji-Spigot-1.20+-2.1.0.jar` | 1.19 起有聊天签名，取消事件后由服务端重新广播 |
 | 1.20 – 26.3 | `Universal_Emoji.zip` | **P 版**：`UniversalEmoji-Paper-1.20+-2.1.0.jar`<br>**S 版**：`UniversalEmoji-Spigot-1.20+-2.1.0.jar` | P 版走 `AsyncChatEvent`，S 版走 `AsyncPlayerChatEvent` |
 
-> **1.10 – 1.12 为什么不在表里**：这一代客户端还没有 `assets/minecraft/font/default.json` 这套字体提供者系统（1.13 才引入），资源包在机制层面无法给客户端新增字形。要在 1.10 – 1.12 显示 emoji，只能走替换 `textures/font/unicode_page_*.png` 的老路子，那是另一套图集切分方式，本版没有提供。**插件本身（legacy 版）在 1.10 – 1.12 依然能正常跑**，只是 emoji 会退化成方块或空白。
+> **1.10 – 1.12 为什么不在表里**：这一代客户端还没有 `assets/minecraft/font/default.json` 这套字体提供者系统（1.13 才引入），资源包在机制层面无法给客户端新增字形。要在 1.10 – 1.12 显示 emoji，只能走替换 `textures/font/unicode_page_*.png` 的老路子，那是另一套图集切分方式，本版没有提供。**因此 legacy 插件的支持范围是 1.13 – 1.18**，1.10 – 1.12 不在支持范围内（旧文档里写的 1.10 是笔误）。
 
 两份资源包的差别在字体 JSON 的写法，图集内容完全相同：
 
@@ -87,7 +87,7 @@ python3 tools/build_unified.py --out dist
 ```
 dist/
 ├── Universal_Emoji.zip          # 1.20+ 用这个
-├── Universal_Emoji_legacy.zip   # 1.10 - 1.19.4 用这个
+├── Universal_Emoji_legacy.zip   # 1.13 - 1.19.4 用这个
 ├── unified_sheet.png            # 512 × 7680 超长图集
 ├── ios.txt / android.txt / windows.txt
 ├── manifest.json
@@ -103,13 +103,13 @@ Minecraft 的 `font/default.json` 是**整体替换**的：只写自己的 bitma
 所以脚本做的是**追加**：
 
 - `modern` 包从 1.21.4 的原版结构出发（`reference → include/space / include/default / include/unifont`）
-- `legacy` 包从 1.16.5 的原版结构出发（完整内联的 `bitmap` + `legacy_unicode`，1.10 也认识这些类型）
+- `legacy` 包从 1.16.5 的原版结构出发（完整内联的 `bitmap` + `legacy_unicode`，1.13+ 都认识这些类型）
 
 然后把自己的 provider 追加到 `providers` 数组**末尾**，原版字形优先级不变。
 
 ### 关于 `pack_format`
 
-按要求写成 `pack_format: 1`，同时补了 `supported_formats: 1 .. 999`。这样 1.21 客户端不会弹“不兼容”红字，1.12 客户端也能加载。
+按要求写成 `pack_format: 1`，同时补了 `supported_formats: 1 .. 999`。这样 1.21 客户端不会弹“不兼容”红字；1.13 – 1.19.4 客户端都能正常加载。
 
 ---
 
@@ -126,7 +126,7 @@ mvn -B package
 ```
 emoji-plugin-modern/target/UniversalEmoji-Paper-1.20+-2.1.0.jar          # Paper 1.19 - 26.3
 emoji-plugin-spigot/target/UniversalEmoji-Spigot-1.20+-2.1.0.jar        # Spigot 1.19 - 26.3
-emoji-plugin-legacy/target/UniversalEmoji-Paper-Legacy-1.10-1.18-2.1.0.jar   # 1.10 - 1.18（Spigot/Paper 通用）
+emoji-plugin-legacy/target/UniversalEmoji-Paper-Legacy-1.10-1.18-2.1.0.jar   # 1.13 - 1.18（Spigot/Paper 通用）
 ```
 
 ---
@@ -232,6 +232,7 @@ Bukkit.getServer().sendMessage(newLine);        // 服务器系统消息，不�
 - 资源包 PNG 约 6 MB，客户端首次进服要下载一次。
 - 1.19.4 以下没有签名问题，`legacy` 模块直接 `setMessage`，保留原版聊天格式（含玩家名）。
 - 三端表是**近似**的厂商支持矩阵，不是 Mojang 官方数据；要精确就改 `platform_overrides.json`。
+- 告示牌与书页只在**玩家编辑提交时**转换（`SignChangeEvent` / `PlayerEditBookEvent`）；命令或其他插件直接写入的书页内容、讲台里展示的成书不会二次处理。
 
 ---
 
@@ -240,7 +241,7 @@ Bukkit.getServer().sendMessage(newLine);        // 服务器系统消息，不�
 这份代码刻意做成了「坏了好修」的形状：
 
 - **先看日志**：启动时应有 `[UniversalEmoji] Universal Emoji ready: 3582 sequences …`。没有这行，就是三张码表没读到；有这行但游戏里还是方块，就是资源包 URL / SHA-1 没对上。
-- **分层很浅**：`emoji-core` 只做纯逻辑（解析、交集、最长匹配，带单测），插件模块各只有三个类——入口 `*Plugin`、聊天监听 `*ChatListener`、资源包下发 `*PackPusher`。改算法只动 core，改服端适配只动对应模块。
+- **分层很浅**：`emoji-core` 只做纯逻辑（解析、交集、最长匹配，带单测），插件模块各只有四个类——入口 `*Plugin`、聊天监听 `*ChatListener`、内容监听 `*ContentListener`（告示牌/书页）、资源包下发 `*PackPusher`。改算法只动 core，改服端适配只动对应模块。
 - **注释全英文、每个类的职责写在类注释里**，报错和文件名一起贴出来就能直接定位。
 - **遇到不会改的报错，可以直接丢给 AI**：把 `mvn` 报错、服务端堆栈、或「某个 emoji 显示不出来」这类现象贴上来，附上对应模块文件名，基本一轮能修。编译命令只有一条：`mvn -B package`（JDK 21）。
 
@@ -254,7 +255,7 @@ Minecraft-TriEmoji/
 ├── emoji-core/                   # 纯 Java 解析核心（有单测）
 ├── emoji-plugin-modern/          # Paper 1.19 - 26.3
 ├── emoji-plugin-spigot/          # Spigot 1.19 - 26.3（纯 Bukkit API）
-├── emoji-plugin-legacy/          # Spigot/Paper 1.10 - 1.18
+├── emoji-plugin-legacy/          # Spigot/Paper 1.13 - 1.18
 ├── dist/                         # 构建产物
 └── docs/                         # 架构与部署细节
 ```

@@ -39,7 +39,10 @@ public final class UniversalEmojiPlugin extends JavaPlugin {
         EmojiTextProcessor processor = new EmojiTextProcessor(table, unsupportedText);
 
         getServer().getPluginManager().registerEvents(new ChatListener(this, processor), this);
-        getServer().getPluginManager().registerEvents(new ResourcePackPusher(this), this);
+        getServer().getPluginManager().registerEvents(new ContentListener(processor), this);
+        ResourcePackPusher packPusher = new ResourcePackPusher(this);
+        getServer().getPluginManager().registerEvents(packPusher, this);
+        packPusher.pushAll();
 
         getLogger().info("Universal Emoji ready: " + table.size()
                 + " sequences supported on iOS + Android + Windows, "

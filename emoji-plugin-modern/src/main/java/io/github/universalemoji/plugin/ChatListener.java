@@ -6,6 +6,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -31,7 +32,7 @@ public final class ChatListener implements Listener {
         this.processor = processor;
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onChat(AsyncChatEvent event) {
         // the raw typed text, styles dropped, PUA and emoji code points preserved
         String plain = PlainTextComponentSerializer.plainText().serialize(event.message());
@@ -44,16 +45,23 @@ public final class ChatListener implements Listener {
 
         event.setCancelled(true);
 
-        String format = plugin.getConfig().getString("emoji.broadcast-format", "<%player%> %message%");
-        String line = format
-                .replace("%player%", event.getPlayer().getName())
-                .replace("%message%", result.text());
+        // this method runs off the main thread: only immutable values cross over,
+        // config and the broadcast itself are handed back to the server thread
+        final Player sender = event.getPlayer();
+        final String name = sender.getName();
 
-        Component out = Component.text(line, NamedTextColor.WHITE);
-        Bukkit.getServer().sendMessage(out);
+        Bukkit.getScheduler().runTask(plugin, () -> {
+            String format = plugin.getConfig().getString("emoji.broadcast-format", "<%player%> %message%");
+            String line = format
+                    .replace("%player%", name)
+                    .replace("%message%", result.text());
 
-        if (plugin.getConfig().getBoolean("emoji.debug", false)) {
-            plugin.getLogger().info(event.getPlayer().getName() + " " + result);
-        }
+            Component out = Component.text(line, NamedTextColor.WHITE);
+            Bukkit.getServer().sendMessage(out);
+
+            if (plugin.getConfig().getBoolean("emoji.debug", false)) {
+                plugin.getLogger().info(name + " " + result);
+            }
+        });
     }
 }

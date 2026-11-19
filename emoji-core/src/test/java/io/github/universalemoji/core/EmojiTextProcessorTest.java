@@ -21,7 +21,8 @@ class EmojiTextProcessorTest {
             + "1.1=1f602\n"
             + "1.2=2764\n"
             + "1.3=1f468-200d-1f469-200d-1f467\n"
-            + "2.1=1f44d\n";
+            + "2.1=1f44d\n"
+            + "2.2=1f1e8-1f1f3\n";
 
     private static final String ANDROID = IOS;
 
@@ -29,7 +30,8 @@ class EmojiTextProcessorTest {
     private static final String WINDOWS = ""
             + "1.1=1f602\n"
             + "1.2=2764\n"
-            + "1.3=1f468-200d-1f469-200d-1f467\n";
+            + "1.3=1f468-200d-1f469-200d-1f467\n"
+            + "2.2=1f1e8-1f1f3\n";
 
     private static InputStream stream(String text) {
         return new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8));
@@ -111,6 +113,23 @@ class EmojiTextProcessorTest {
         String input = "hi \uD83D\uDE02 [1.3] 世界";
         assertEquals("hi " + (char) 0xE000 + " " + (char) 0xE002 + " 世界",
                 processor.process(input).text());
+    }
+
+    @Test
+    void flagPairStaysOneGlyph() {
+        // the two regional indicators must be matched as 1f1e8-1f1f3, not as two letters
+        String flag = "\uD83C\uDDE8\uD83C\uDDF3";
+        EmojiTextProcessor.Result result = processor.process(flag);
+        assertEquals(String.valueOf((char) 0xE011), result.text());
+        assertEquals(1, result.nativeGlyphs());
+    }
+
+    @Test
+    void ordinarySymbolsAreNotTreatedAsEmoji() {
+        String text = "\u2192 \u2605 \u266A";
+        EmojiTextProcessor.Result result = processor.process(text);
+        assertEquals(text, result.text());
+        assertFalse(result.changed());
     }
 
     @Test

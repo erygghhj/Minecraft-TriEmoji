@@ -35,7 +35,10 @@ public final class LegacyEmojiPlugin extends JavaPlugin {
 
         EmojiTextProcessor processor = new EmojiTextProcessor(table, unsupportedText);
         getServer().getPluginManager().registerEvents(new LegacyChatListener(this, processor), this);
-        getServer().getPluginManager().registerEvents(new LegacyPackPusher(this), this);
+        getServer().getPluginManager().registerEvents(new LegacyContentListener(processor), this);
+        LegacyPackPusher packPusher = new LegacyPackPusher(this);
+        getServer().getPluginManager().registerEvents(packPusher, this);
+        packPusher.pushAll();
 
         getLogger().info("Universal Emoji (legacy) ready: " + table.size() + " sequences");
     }

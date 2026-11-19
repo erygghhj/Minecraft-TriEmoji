@@ -7,8 +7,10 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Immutable glyph table shared by every platform build.
@@ -33,11 +35,14 @@ public final class EmojiTable {
     public static final int PUA_CAPACITY = PUA_END - PUA_START + 1;
 
     private final Map<String, Integer> supportedGlyphs;
+    private final Set<Integer> knownCodepoints;
     private final int columns;
     private final int maxSafeIndex;
 
-    private EmojiTable(Map<String, Integer> supportedGlyphs, int columns, int maxSafeIndex) {
+    private EmojiTable(Map<String, Integer> supportedGlyphs, Set<Integer> knownCodepoints,
+                       int columns, int maxSafeIndex) {
         this.supportedGlyphs = supportedGlyphs;
+        this.knownCodepoints = knownCodepoints;
         this.columns = columns;
         this.maxSafeIndex = maxSafeIndex;
     }
@@ -78,7 +83,41 @@ public final class EmojiTable {
             }
         }
 
-        return new EmojiTable(Collections.unmodifiableMap(all), columns, maxIndex);
+        return new EmojiTable(Collections.unmodifiableMap(all), knownCodepoints(iosMap, androidMap, windowsMap),
+                columns, maxIndex);
+    }
+
+    /**
+     * Every code point that starts at least one known emoji sequence on any platform.
+     *
+     * <p>Used to decide whether an unmatched cluster is "an emoji this build cannot
+     * draw" or just ordinary text (arrows, {@code ★}, {@code ♪}). Comparing against
+     * the tables instead of hard-coded Unicode ranges keeps plain symbols intact.
+     */
+    private static Set<Integer> knownCodepoints(Map<String, Integer> iosMap,
+                                                Map<String, Integer> androidMap,
+                                                Map<String, Integer> windowsMap) {
+        Set<Integer> out = new HashSet<>(9000);
+        collectCodepoints(iosMap, out);
+        collectCodepoints(androidMap, out);
+        collectCodepoints(windowsMap, out);
+        return Collections.unmodifiableSet(out);
+    }
+
+    private static void collectCodepoints(Map<String, Integer> map, Set<Integer> out) {
+        for (String sequence : map.keySet()) {
+            int dash = sequence.indexOf('-');
+            String first = dash < 0 ? sequence : sequence.substring(0, dash);
+            try {
+                int codePoint = Integer.parseInt(first, 16);
+                // 0x00A0 keeps the keycap bases (0-9, #, *) and other ASCII text out.
+                if (codePoint >= 0x00A0) {
+                    out.add(codePoint);
+                }
+            } catch (NumberFormatException ignored) {
+                // a malformed key is rejected by read() before it can land here
+            }
+        }
     }
 
     private static Map<String, Integer> read(int columns, InputStream stream, String name) throws IOException {
@@ -124,6 +163,11 @@ public final class EmojiTable {
 
     public boolean isSupported(String sequence) {
         return supportedGlyphs.containsKey(sequence);
+    }
+
+    /** @return true when this code point starts an emoji on at least one platform. */
+    public boolean isEmojiCodepoint(int codePoint) {
+        return knownCodepoints.contains(codePoint);
     }
 
     public int columns() {

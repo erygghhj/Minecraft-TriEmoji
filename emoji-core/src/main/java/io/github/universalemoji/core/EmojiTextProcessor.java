@@ -196,8 +196,15 @@ public final class EmojiTextProcessor {
         int i = start;
         int n = codePoints.length;
         while (true) {
+            int base = i < n ? codePoints[i] : -1;
             if (i < n) {
                 i++; // base
+            }
+            // regional indicators (flags) are always pairs: splitting them would
+            // turn a flag into two lone letter tiles
+            if (base >= 0x1F1E6 && base <= 0x1F1FF && i < n
+                    && codePoints[i] >= 0x1F1E6 && codePoints[i] <= 0x1F1FF) {
+                i++;
             }
             while (i < n && isModifier(codePoints[i])) {
                 i++;
@@ -220,44 +227,13 @@ public final class EmojiTextProcessor {
         return codePoint >= 0xE0020 && codePoint <= 0xE007F; // tag sequences (flags)
     }
 
-    private static boolean looksLikeEmojiCluster(int[] codePoints, int start, int end) {
+    private boolean looksLikeEmojiCluster(int[] codePoints, int start, int end) {
         for (int i = start; i < end; i++) {
-            if (isEmojiBase(codePoints[i])) {
+            if (table.isEmojiCodepoint(codePoints[i])) {
                 return true;
             }
         }
         return false;
-    }
-
-    /** Conservative rough test: does this codepoint belong to an emoji block. */
-    private static boolean isEmojiBase(int codePoint) {
-        if (codePoint >= 0x1F000 && codePoint <= 0x1FAFF) {
-            return true;
-        }
-        if (codePoint >= 0x2600 && codePoint <= 0x27BF) {
-            return true;
-        }
-        if (codePoint >= 0x2190 && codePoint <= 0x21FF) {
-            return true;
-        }
-        if (codePoint >= 0x2300 && codePoint <= 0x23FF) {
-            return true;
-        }
-        if (codePoint >= 0x2B00 && codePoint <= 0x2BFF) {
-            return true;
-        }
-        if (codePoint >= 0x2900 && codePoint <= 0x297F) {
-            return true;
-        }
-        switch (codePoint) {
-            case 0x00A9: case 0x00AE: case 0x203C: case 0x2049: case 0x2122: case 0x2139:
-            case 0x24C2: case 0x25AA: case 0x25AB: case 0x25B6: case 0x25C0:
-            case 0x25FB: case 0x25FC: case 0x25FD: case 0x25FE:
-            case 0x2934: case 0x2935: case 0x3030: case 0x303D: case 0x3297: case 0x3299:
-                return true;
-            default:
-                return false;
-        }
     }
 
     private static String hexRange(int[] codePoints, int from, int to) {
