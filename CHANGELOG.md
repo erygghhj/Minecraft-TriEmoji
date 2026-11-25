@@ -1,6 +1,6 @@
 # Changelog
 
-## 未发布
+## 2.2.0 — 2026-11-25
 
 ### 新增：告示牌与书页转换
 - 三个模块各加一个 `*ContentListener`：监听 `SignChangeEvent` 与 `PlayerEditBookEvent`，把告示牌四行、书与笔每一页里的 emoji 同样换成 PUA 字形。只用了跨版本稳定的 `String` API（`getLine`/`setLine`、`BookMeta#getPages`），1.13 – 26.3 通用。
@@ -18,6 +18,9 @@
 
 ### 修复：reload 后不下发资源包
 - 三个 `*PackPusher` 增加 `pushAll()`，`onEnable` 时对已在线玩家补推，`/reload` 后不用重连也能拿到包。
+
+### 修复：签名阶段改写书页
+- `PlayerEditBookEvent` 在 `isSigning = true` 时页面已经定稿，这时候调用 `setPages` 会被服务端拒绝。三个 `*ContentListener` 现在跳过签名阶段（草稿在“完成”那一步已经转换过），并且改为在 `BookMeta` 副本上修改，不再直接改事件里那个对象。
 
 ### 文档：legacy 支持范围更正为 1.13 – 1.18
 - `1.10` 是遗留笔误。1.10 – 1.12 没有 `font/default.json` 字体提供者系统，资源包在机制上无法新增字形，不在支持范围。

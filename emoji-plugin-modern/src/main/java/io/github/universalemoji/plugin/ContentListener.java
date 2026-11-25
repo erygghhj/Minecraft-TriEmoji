@@ -42,7 +42,12 @@ public final class ContentListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onBookEdit(PlayerEditBookEvent event) {
-        BookMeta meta = event.getNewBookMeta();
+        // a signed book is final: rewriting its pages there throws on Paper, and the
+        // completed draft was already converted one step before signing
+        if (event.isSigning()) {
+            return;
+        }
+        BookMeta meta = (BookMeta) event.getNewBookMeta().clone();
         List<String> pages = meta.getPages();
         List<String> converted = new ArrayList<>(pages.size());
         boolean changed = false;
